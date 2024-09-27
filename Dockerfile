@@ -1,23 +1,19 @@
-# Use an Ubuntu base image
-FROM ubuntu:20.04
+# Use the latest Ubuntu image
+FROM ubuntu:latest
 
-# Set environment variables to avoid prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Update and install necessary packages
+# Update and install required packages
 RUN apt-get update && apt-get install -y \
-    xfce4 \
-    xfce4-goodies \
-    tightvncserver \
-    && apt-get clean
+    python3 \
+    python3-pip
 
-# Set the VNC password (change "yourpassword" to a strong password)
-RUN mkdir -p /root/.vnc && \
-    echo "yourpassword" | vncpasswd -f > /root/.vnc/passwd && \
-    chmod 600 /root/.vnc/passwd
+# Set the working directory
+WORKDIR /app
 
-# Expose the VNC port
-EXPOSE 5901
+# Install JupyterLab
+RUN pip3 install jupyterlab
 
-# Start the VNC server
-CMD ["bash", "-c", "vncserver :1 -geometry 1280x720 -depth 24 && tail -f /root/.vnc/*.log"]
+# Expose port 443
+EXPOSE 443
+
+# Start JupyterLab on port 8080 without authentication
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=443", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
