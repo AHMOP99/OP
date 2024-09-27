@@ -9,11 +9,11 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory
 WORKDIR /app
 
-# Install JupyterLab
-RUN pip3 install jupyterlab
+# Install Jupyter Notebook
+RUN pip3 install notebook
 
-# Expose port 443
-EXPOSE 443
+# Expose port 8888
+EXPOSE 8888
 
-# Start JupyterLab on port 8080 without authentication
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=443", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+# Start Jupyter Notebook on port 8888 without authentication
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
